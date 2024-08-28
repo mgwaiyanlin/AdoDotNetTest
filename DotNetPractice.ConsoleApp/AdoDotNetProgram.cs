@@ -10,8 +10,9 @@ namespace DotNetPractice.ConsoleApp
 {
     internal class AdoDotNetProgram
     {
-        private static SqlConnectionStringBuilder stringBuilder;
-        private static SqlConnection connection;
+        private SqlConnectionStringBuilder stringBuilder;
+        private SqlConnection connection;
+        private SqlCommand command;
         public AdoDotNetProgram()
         {
 
@@ -32,7 +33,7 @@ namespace DotNetPractice.ConsoleApp
         public void ReadData()
         {
             string query = "select * from blogs";
-            SqlCommand command = new SqlCommand(query, connection);
+            command = new SqlCommand(query, connection);
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
@@ -48,11 +49,36 @@ namespace DotNetPractice.ConsoleApp
                 Console.WriteLine("content: " + dr["blog_content"]);
                 Console.WriteLine("------------------------------------");
             }
+           
+        }
+
+        public void CreateData(string title, string author, string blog_content)
+        {
+            string query = @"INSERT INTO [dbo].[blogs]
+                   ([title]
+                   ,[author]
+                   ,[blog_content])
+             VALUES
+                   (@title,
+		           @author,
+		           @blog_content)";
+
+            command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@title", title);
+            command.Parameters.AddWithValue("@author", author);
+            command.Parameters.AddWithValue("@blog_content", blog_content);
+
+            int result = command.ExecuteNonQuery();
+
+            string message = result > 0 ? "Data saved successfully." : "Failed to save your data!";
+            Console.WriteLine(message);
+        }
+
+        public void CloseProgram()
+        {
             connection.Close();
 
             Console.WriteLine("Database connection closed!");
         }
-
-        
     }
 }
