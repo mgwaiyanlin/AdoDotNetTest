@@ -1,7 +1,7 @@
 # Requirements
-- IDE (Visual Studio)
-- Install SQL Server
-- Microsoft SQL Server Management Studio
+:white_check_mark: IDE (Visual Studio)
+:white_check_mark: Install SQL Server
+:white_check_mark: Microsoft SQL Server Management Studio
 
 # Steup in VS IDE 
 - Ceate a new project
