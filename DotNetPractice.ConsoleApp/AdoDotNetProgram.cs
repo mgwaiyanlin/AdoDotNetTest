@@ -10,21 +10,19 @@ namespace DotNetPractice.ConsoleApp
 {
     internal class AdoDotNetProgram
     {
-        private SqlConnectionStringBuilder stringBuilder;
+        private readonly SqlConnectionStringBuilder stringBuilder = new SqlConnectionStringBuilder()
+        {
+            DataSource = "localhost", // server name
+            InitialCatalog = "DotNetPractice", // database name
+            UserID = "myserver",
+            Password = "password",
+        };
         private SqlConnection connection;
         private SqlCommand command;
         public AdoDotNetProgram()
         {
 
-            stringBuilder = new SqlConnectionStringBuilder();
-            stringBuilder.DataSource = "localhost"; // server name
-            stringBuilder.InitialCatalog = "DotNetPractice"; // database name
-            stringBuilder.UserID = "myserver";
-            stringBuilder.Password = "password";
             connection = new SqlConnection(stringBuilder.ConnectionString);
-
-            // alternative way of sql connection
-            //SqlConnection connection = new SqlConnection("stringBuilder.DataSource = \"localhost\";stringBuilder.InitialCatalog = \"DotNetPractice\";stringBuilder.UserID = \"myserver\";stringBuilder.Password = \"password\"; ");
 
             connection.Open();
 
@@ -68,9 +66,40 @@ namespace DotNetPractice.ConsoleApp
             command.Parameters.AddWithValue("@author", author);
             command.Parameters.AddWithValue("@blog_content", blog_content);
 
-            int result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery(); // returns the number of rows affected.
 
             string message = result > 0 ? "Data saved successfully." : "Failed to save your data!";
+            Console.WriteLine(message);
+        }
+
+        public void UpdateData(int id, string title, string author, string blog_content)
+        {
+            string query = @"UPDATE [dbo].[blogs]
+                   SET [title] = @title
+                      ,[author] = @author
+                      ,[blog_content] = @blog_content
+                 WHERE id = @id";
+
+            command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@title", title);
+            command.Parameters.AddWithValue("@author", author);
+            command.Parameters.AddWithValue("@blog_content", blog_content);
+
+            int result = command.ExecuteNonQuery(); // returns the number of rows affected.
+
+            string message = result > 0 ? "Data updated successfully." : "Failed to update your data!";
+            Console.WriteLine(message);
+        }
+
+        public void DeleteData(int id)
+        {
+            string query = @"DELETE FROM [dbo].[blogs] WHERE id = @id";
+            command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            int result = command.ExecuteNonQuery();
+            string message = result > 0 ? "Data deleted successfully." : "Failed to delete your data!";
             Console.WriteLine(message);
         }
 
