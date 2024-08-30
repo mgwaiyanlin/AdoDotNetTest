@@ -15,6 +15,7 @@ namespace DotNetPractice.ConsoleApp
             InitialCatalog = "DotNetPractice",
             UserID = "myserver",
             Password = "password",
+            TrustServerCertificate = true,
         };
     }
 }
