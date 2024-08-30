@@ -13,4 +13,11 @@
 - Create a class as a db connection string (ConnectionStrings.cs)
 - Create a class for dapper process handling all CRUD.
 
+# For EF Core CRUD
+There are two types of entity frameworks. (Esp for Dot Net framework and Dot Net Core)
+- Install Microsoft.EntityFrameworkCore
+- Install Microsoft.EntityFrameworkCore.SqlServer
+- Create AppDbContext.cs
+- Make some changes in BlogDto such as describing Table and Key.
+- 
 
